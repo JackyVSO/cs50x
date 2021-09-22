@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+        <link href="styles.css" rel="stylesheet">
+        <link rel='icon' href='https://static.thenounproject.com/png/275491-200.png' type="image/x-icon">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Which East Asian megacity are you?</title>
+        <script>
+            var TokyoCount = 0;
+            var HongKongCount = 0;
+            var SeoulCount = 0;
+            var ShanghaiCount = 0;
+            cities = {
+                        0: {'name': 'Tokyo', 'count': TokyoCount}, 
+                        1: {'name': 'HongKong', 'count': HongKongCount},
+                        2: {'name': 'Seoul', 'count': SeoulCount},
+                        3: {'name': 'Shanghai', 'count': ShanghaiCount}
+                    }
+                    
+            key = {
+                'a11': [0.76, 1.13, 0.69, 0],
+                'a12': [0, 0.88, 0.54, 1.26],
+                'a13': [1.37, 0.67, 0.59, 0],
+                'a14': [0.87, 0, 1.01, 0.23],
+                'a21': [1.09, 0, 0.54, 0.69],
+                'a22': [0, 1.36, 0.93, 0.35],
+                'a23': [0.48, 0.63, 0, 1.27],
+                'a24': [0, 0.59, 1.11, 0.76],
+                'a31': [0.53, 0, 1.46, 0.71],
+                'a32': [1.07, 0.56, 0.89, 0],
+                'a33': [0.37, 1.09, 0, 0.62],
+                'a34': [0.71, 0.44, 0, 1.21],
+                'a41': [1.31, 0, 0.85, 0.47],
+                'a42': [0.52, 0.79, 0, 1.39],
+                'a43': [0.67, 0.49, 1.08, 0],
+                'a44': [0, 1.26, 0.51, 0.82]
+            };
+            
+            function processSetup()
+            {
+                question = event.target.name;
+                answer = event.target.value;
+                process(question, answer);
+            }
+            function process(question, answer)
+            {
+                tabulate(answer);
+                nextint = parseInt(question) + 1;
+                question = '#question' + question;
+                document.querySelector(question).style.visibility = 'hidden';
+                
+                if (nextint < 6)
+                {
+                    next = '#question' + nextint.toString();
+                    element = document.querySelector(next);
+                    element.style.visibility = 'visible';
+                    element.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'center'});
+                }
+            }
+            function tabulate(answer)
+            {
+                for (var i in cities)
+                {
+                    cities[i]['count'] += key[answer][i];
+                }
+            }
+            function calculateResult()
+            {
+                let highscore = -1;
+                var winner = 'None';
+                for (var city in cities)
+                {
+                    if (cities[city]['count'] > highscore)
+                    {
+                        highscore = cities[city]['count'];
+                        winner = cities[city]['name'];
+                    }
+                    localStorage.setItem('winner', winner);
+                }
+                return winner;
+            }
+            function listen()
+            {
+                document.querySelector('#quiz').addEventListener('click', processSetup, false);
+                document.querySelector('form').addEventListener('submit', calculateResult, false);
+            }
+            document.addEventListener('DOMContentLoaded', listen);
+        </script>
+    </head>
+    <body class='quizbody'>
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item" style='padding: 0px 80px 0px 80px; font-size: 18px; font-style: italic; color: white;'>
+                            <a class="nav-link" href="/aboutthis.html">About This</a>
+                        </li>
+                        <li class="nav-item" style='padding: 0px 80px 0px 80px; font-size: 18px; font-style: italic; color: white;'>
+                            <a class="nav-link" href="/aboutme.html">About Me</a>
+                        </li>
+                        <li class="nav-item" style='padding: 0px 80px 0px 80px; font-size: 18px; font-style: italic; color: white;'>
+                            <a class="nav-link" href="/aboutlife.html">About Life</a>
+                        </li>
+                        <li class="nav-item" style='padding: 0px 80px 0px 80px; font-size: 18px; font-style: italic; color: white;'>
+                            <a class="nav-link" href="/aboutface.html">About Face</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <br><br>
+        <h1>Which East Asian megacity are you?</h1>
+        <br>
+        <div>
+            <form id='quiz' action='/result.html' method=get>
+                <div id='question1'>
+                    <h3>Question 1:</h3>
+                    <h4>A stranger stops you on the street and asks you for directions. How do you respond?</h4>
+                    <br>
+                    <div class='radioleft'>
+                        <input type="radio" id="a11" name="1" value="a11">
+                        <label for="a11">Say hello, smile politely, small talk, and patiently help them find their way.</label><br>
+                        <input type="radio" id="a12" name="1" value="a12">
+                        <label for="a12">Look slightly annoyed, mutter "Just go that way and turn right" while loosely pointing in a general direction, and then quickly move on.</label><br>
+                        <input type="radio" id="a13" name="1" value="a13">
+                        <label for="a13">Tell him where he needs to go, offer to follow him there, and don't let him out of sight until you're sure he's found it and is happy and has all he needs.</label><br>
+                        <input type="radio" id="a14" name="1" value="a14">
+                        <label for="a14">Say "uhhh...", smile coyly, and try your best to help even though you don't actually know the way there. </label>
+                    </div>
+                </div>
+                <hr>
+                <div id='question2'>
+                    <h3>Question 2:</h3>
+                    <h4>Your reach into your pocket and your keys are missing. Where are they?</h4>
+                    <br>
+                    <div class='radioleft'>
+                        <input type="radio" id="a21" name="2" value="a21">
+                        <label for="a21">In my wallet. Why would they be in my pocket? They're always in my wallet, in the second pocket from the left.</label><br>
+                        <input type="radio" id="a22" name="2" value="a22">
+                        <label for="a22">God knows. I was out all night and probably threw them somewhere when I came back. I regret nothing.</label><br>
+                        <input type="radio" id="a23" name="2" value="a23">
+                        <label for="a23">Arrrrgh, I don't know, and I don't have time to look for them because I have a class in 10 minutes and then work and then gym and then family dinner...</label><br>
+                        <input type="radio" id="a24" name="2" value="a24">
+                        <label for="a24">Keys? Dude, the 20th century called and asked for its metallic object based technology back. If I lose my key token, I'll just generate a new one in the app.</label>
+                    </div>
+                </div>
+                <hr>
+                <div id='question3'>
+                    <h3>Question 3:</h3>
+                    <h4>How do you feel about gaming?</h4>
+                    <br>
+                    <div class='radioleft' style='width: 50%'>
+                        <input type="radio" id="a31" name="3" value="a31">
+                        <label for="a31">Gaming is an art form. If you excel at gaming, I admire you deeply.</label><br>
+                        <input type="radio" id="a32" name="3" value="a32">
+                        <label for="a32">Sounds like fun!</label><br>
+                        <input type="radio" id="a33" name="3" value="a33">
+                        <label for="a33">I don't know. Talk money to me. How much can I earn from gaming?</label><br>
+                        <input type="radio" id="a34" name="3" value="a34">
+                        <label for="a34">It might be fun but it's ultimately a waste of time. You should do something more constructive instead.</label>
+                    </div>
+                </div>
+                <hr>
+                <div id='question4'>
+                    <h3>Question 4:</h3>
+                    <h4>You've just turned 26. What have you done with your life so far?</h4>
+                    <br>
+                    <div class='radioleft' style='width: 47%'>
+                        <input type="radio" id="a41" name="4" value="a41">
+                        <label for="a41">Been a good person and made my parents and my ancestors proud, I hope (?)</label><br>
+                        <input type="radio" id="a42" name="4" value="a42">
+                        <label for="a42">Studied, studied, studied, studied, studied, and studied :-|</label><br>
+                        <input type="radio" id="a43" name="4" value="a43">
+                        <label for="a43">Tried my best, worked hard, and shared beautiful moments with friends and lovers!</label><br>
+                        <input type="radio" id="a44" name="4" value="a44">
+                        <label for="a44">Become a junior executive in a multinational bank and a gold member of The Midnight Lounge</label>
+                    </div>
+                </div>
+                <hr>
+                <br>
+                <div id='question5'>
+                    <button id='submit' type='submit' name='submit'>Alright, tell me!</button>
+                </div>
+                <br>
+            </form>
+        </div>
+        <footer>
+            <br><br><br>
+            <a style='position:relative; bottom: 4%; right: 45%' href='index.html'>Home</a>
+            <br>
+        </footer>
+    </body>
+</html>

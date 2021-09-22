@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+        <link href="styles.css" rel="stylesheet">
+        <link rel='icon' href='https://static.thenounproject.com/png/275491-200.png' type="image/x-icon">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Which East Asian megacity are you?</title>
+        <script>
+            citycoords = {
+                'Tokyo': {'longitude': 139.45, 'latitude': 35.41}, 
+                'HongKong': {'longitude': 114.1, 'latitude': 22.17},
+                'Seoul': {'longitude': 126.59, 'latitude': 37.33},
+                'Shanghai': {'longitude': 121.29, 'latitude': 31.14}
+            }
+            function begin()
+            {
+                var winner = localStorage.getItem('winner');
+                let winnerclass = "." + localStorage.getItem('winner');
+                let winnerall = document.querySelectorAll(winnerclass);
+                for (var i = 0, len = winnerall.length; i < len; i++)
+                {
+                    winnerall[i].style.display = 'inline-block';
+                }
+                geolocate(winner);
+            }
+            function geolocate(city)
+            {
+                if (city !== null)
+                {
+                    var citylong = citycoords[city]['longitude'];
+                    var citylat = citycoords[city]['latitude'];
+                }
+                if (navigator.geolocation)
+                {
+                    navigator.geolocation.getCurrentPosition(function(position){let pos = [position.coords.latitude, position.coords.longitude]; let distance = haversine(pos[1], pos[0], citylong, citylat);
+                    document.querySelector('#geolocation').innerHTML ='You are currently ' + distance + ' kilometers away from your East Asian spirit megacity.';});
+                }
+            }
+            function haversine(lon1, lat1, lon2, lat2)
+            // Haversine function by Deduplicator, adapted from https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
+            {
+                var R = 6371;
+                var dLat = deg2rad(lat2-lat1);
+                var dLon = deg2rad(lon2-lon1); 
+                var a = 
+                    Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+                    Math.sin(dLon/2) * Math.sin(dLon/2)
+                    ; 
+                var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+                var d = R * c;
+                return Math.round(d);
+            }
+
+            function deg2rad(deg) 
+            {
+                return deg * (Math.PI/180);
+            }
+            
+            document.addEventListener('DOMContentLoaded', begin);
+        </script>
+    </head>
+    <body class='quizbody'>
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item" style='padding: 0px 80px 0px 80px; font-size: 18px; font-style: italic; color: white;'>
+                            <a class="nav-link" href="/aboutthis.html">About This</a>
+                        </li>
+                        <li class="nav-item" style='padding: 0px 80px 0px 80px; font-size: 18px; font-style: italic; color: white;'>
+                            <a class="nav-link" href="/aboutme.html">About Me</a>
+                        </li>
+                        <li class="nav-item" style='padding: 0px 80px 0px 80px; font-size: 18px; font-style: italic; color: white;'>
+                            <a class="nav-link" href="/aboutlife.html">About Life</a>
+                        </li>
+                        <li class="nav-item" style='padding: 0px 80px 0px 80px; font-size: 18px; font-style: italic; color: white;'>
+                            <a class="nav-link" href="/aboutface.html">About Face</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <br>
+        <h1 style='font-size: 84px'>You are:</h1>
+        <br><br><br>
+        <h2 class='Tokyo' style='font-size: 66px; display: none; position: relative;' >Tokyo</h2>
+        <h2 class='HongKong' style='font-size: 66px; display: none; position: relative;'>Hong Kong</h2>
+        <h2 class='Seoul' style='font-size: 66px; display: none; position: relative;'>Seoul</h2>
+        <h2 class='Shanghai' style='font-size: 66px; display: none; position: relative;'>Shanghai</h2>
+        <img alt='Japanese flag' src='/pictures/Japan.gif' class='flag Tokyo' style='display: none'>
+        <img alt='Hong Kong flag' src='/pictures/HongKongflag.gif' class='flag HongKong' style='display: none'>
+        <img alt='South Korean flag' src='/pictures/SouthKorea.gif' class='flag Seoul' style='display: none'>
+        <img alt='Chinese flag' src='/pictures/China.gif' class='flag Shanghai' style='display: none'>
+        <br>
+        <img alt='Aerial view of Tokyo' src='/pictures/TokyoCut.png' class='cityview Tokyo' style='display: none'>
+        <img alt='Aerial view of Hong Kong' src='/pictures/HongKongCut.png' class='cityview HongKong' style='display: none'>
+        <img alt='Aerial view of Seoul' src='/pictures/SeoulCut.png' class='cityview Seoul' style='display: none'>
+        <img alt='Aerial view of Shanghai' src='/pictures/ShanghaiCut.png' class='cityview Shanghai' style='display: none'>
+        <br><br>
+        <div id=description>
+            <h5 class='Tokyo' style='display: none'>Colorful and enormous yet eerily clean and orderly. You've gotten where you are through a strong sense of duty and consideration. From the mad flashing lights of Akihabara to the serenity of the imperial garden, you span many kinds of beauty.</h5>
+            <h5 class='HongKong' style='display: none'>A towering financial centre. An international hub. A place where you work hard and play hard. Maybe not a megacity per se, but what you lack in size, you make up for in density. You're clean-cut and business-focused down in Central, a bit wild and sleazy up the hill in Soho, and then the darkness up at Victoria Peak symbolizes your well-repressed unconscious.</h5>
+            <h5 class='Seoul' style='display: none'>A city that has it all, from the gritty melting pot of Itaewon to the flashy facades of Gangnam to the solemn silence on the hill behind the palace, Seoul is moving forward but also finds time for the heart's desires.</h5>
+            <h5 class='Shanghai' style='display: none'>You're going places! You may be a work in progress - still messy and dirty in some places while shiny and impressive in others - but you're a hard worker, you're moving forward and nothing can stop you. Soon you'll have it all figured out. Lujiazui represents your stellar achievements, but don't forget to stop for a good cup of tea over in the French Concession once in a while, okay?</h5>
+        </div>
+        <br><br><br><br>
+        <hr>
+        <h4 id='geolocation'>Allow location access to find out how far you are from your East Asian spirit megacity.</h4>
+        <hr>
+        <br><br><br><br>
+        <h2>Now, pick your flavour:</h2>
+        <br>
+        <button type="button" class="btn btn-light" onclick="window.location.href='/day.html'">Day</button>
+        <button type="button" class="btn btn-dark" onclick="window.location.href='/night.html'">Night</button>
+        <footer>
+            <br><br><br>
+            <a style='position:relative; bottom: 4%; right: 45%' href='index.html'>Home</a>
+            <br>
+        </footer>
+    </body>
+</html>
