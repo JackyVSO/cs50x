@@ -17,7 +17,7 @@ header td a
     text-align: center;
     padding: 20px 0px 20px 0px;
     color: white;
-    background-image: url('/pictures/Tokyo_night_1732dark.jpg');
+    background-image: url('/cs50x/pictures/Tokyo_night_1732dark.jpg');
 }
 
 .quizbody
@@ -25,7 +25,7 @@ header td a
     text-align: center;
     padding: 20px 0px 20px 0px;
     color: black;
-    background-image: url('/pictures/Tokyo_night_1732bright.jpg');
+    background-image: url('/cs50x/pictures/Tokyo_night_1732bright.jpg');
 }
 
 .center a
